@@ -1,0 +1,252 @@
+\documentclass[a4paper, 12pt, titlepage, finall]{extreport}
+
+%различные пакеты
+
+\usepackage[T1, T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{tikz}
+\usepackage{geometry}
+\usepackage{indentfirst}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{array}
+\graphicspath{{./images/}}
+
+\usetikzlibrary{positioning, arrows}
+
+\geometry{a4paper, left = 15mm, top = 10mm, bottom = 20mm, right = 15mm}
+
+\setmainfont{Spectral Light}%{Times New Roman}
+\setmonofont{DejaVu Sans Mono}
+%\setcounter{secnumdepth}{3}
+%\setcounter{tocdepth}{3}
+
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\lstdefinestyle{customasm}{
+  belowcaptionskip=1\baselineskip,
+  frame=L,
+  xleftmargin=\parindent,
+  language=[x86masm]Assembler,
+  basicstyle=\footnotesize\ttfamily,
+  commentstyle=\itshape\color{purple!40!black},
+}
+
+\lstset{escapechar=@,style=customc}
+
+\begin{document}
+
+    \begin{titlepage}
+        \begin{center}
+            {\small \sc Московский государственный университет имени М.~В.~Ломоносова\\
+            Факультет вычислительной математики и кибернетики\\
+            Кафедра автоматизации систем вычислительных комплексов\\}
+            \vfill
+            {\large \sc Конспекты лекций.}\\~\\
+
+            {\large \bf Проектирование и программирование большиех систем на C++.}\\~\\
+
+        \end{center}
+        
+        \begin{flushright}
+            \vfill
+            \vfill
+            {Никифоров Никита Игоревич, 421 группа}\\
+            {Лектор:}\\
+            {Коноводов Виталий Александрович}\\
+        \end{flushright}
+
+        \begin{center}
+            \vfill
+            {\small Москва\\2020}
+        \end{center}
+    \end{titlepage}
+
+    \chapter*{Аннотация}
+        Форма контроля:
+        \begin{itemize}
+            \item Нужно набирать баллы
+            \item Домашние задания
+            \item Тесты (Дополнительные баллы)
+            \item Экзамен
+            \item + Дополнительные домашки (засчитываются только первым 2-3 людям)
+        \end{itemize}
+        E-mail лектора: vkonovodov@gmail.com
+    \newpage
+    \tableofcontents
+    \newpage
+    \chapter*{Введение}
+        \addcontentsline{toc}{chapter}{\protect\numberline{}Введение}%
+    \chapter{Лекция 1}
+        \section{Шаблоны в C++}
+            Шаблоны $-$ замечательная вещь. Пример:
+\begin{lstlisting}
+template <typename T>
+void f(T& param);
+
+int x = 1;
+const int cx = x;
+const int& rx = x;
+
+f(x);  // T - int
+f(cx); // T - const int
+f(rx); // T - const int&
+\end{lstlisting}
+            Существует два правила:
+            \begin{itemize}
+                \item Случай 1 $-$ тип параметра указатель или ссылка. Ссылочная часть игнорируется.
+                \item Случай 2 $-$ передача по значению. Ссылочная часть игнорируется. Если после этого остаётся const, то он тоже игнорируется.
+            \end{itemize}
+\begin{lstlisting}
+template <typename T>
+void f(T param);
+
+const char* const ptr = "abcd"; // Костантный указатель на константу.
+f(ptr); // param - const char*
+\end{lstlisting}
+
+            Указатели на массивы. Типы s и p различные.
+
+\begin{lstlisting}
+const char s[] = "ab"; // const char[3]
+const char* p = s; // const char*
+
+template <typename T>
+void f(T param);
+void g(T& param);
+
+f(s); // const char *
+g(s); // const char (&) [3]
+f(p); // const char*&
+\end{lstlisting}
+
+            Ещё немного примеров и лайфхаков. Как узнать тип функции? Просто не опиши тело функции и вызови её.
+            Компилятор сам тебе скажет, что там за тип.
+        \section{Автоматические вывод типа переменной}
+\begin{lstlisting}
+auto x = 0; // int
+auto y = x, *z = &x; // int, int*
+auto& ref = x; // int&
+const auto &xcref = x; // const int&
+auto *p = &x; // int *p
+const auto* cp = p; // const int *p
+const auto pc = &x; // int * const
+\end{lstlisting}
+            Всегда пишите * после {\bf auto} если нужен указатель! Это не сложно, но добавит понимания.
+            Поговорим про {\bf initializer\_list}
+\begin{lstlisting}
+#include <initializer_list>
+
+int main() {
+    int x = 2;
+    int y(2);
+
+    // 4 способа чяерез auto
+    auto x1 = 2; // точно int
+    auto x2(2); // точно int
+    auto x3 = {2}; // Что-то что не int (std::initializer_list<int>)
+    auto x4{2}; // int
+}
+\end{lstlisting}
+            Если для {\bf auto} аргумент указан в фигурных скобках, то для auto это будет {\bf initializer\_list}. 
+            И это единственное отличие автоматического выбора типов для шаблонов и auto.
+            Для {\bf template} это вообще не будет работать.
+        \section{Ключевое слово decltype}
+\begin{lstlisting}
+decltype(1 + 2) x = 1; // int
+decltype(x) y = x; // int
+decltype(1, x) z = x; // int & (Потому что , тоже оператор, который возвращает ссылку)
+
+
+auto cmp = [](char const* p1, char const* p2) {
+    return strcmp(p1, p2) < 0;
+}
+
+std::map<char const*, unsigned, decltype(cmp)> MyMap(cmp);
+\end{lstlisting}
+        \section{Круглые и фигурные скобки}
+        До С++11 невозможно было создать контейнер содержащим определённый набор значений.
+\begin{lstlisting}
+std::vector<int> v{1, 3, 5};
+
+double a, b;
+int c{a + b}; // error!
+int d = a + b; // ok!
+int e(a + b); // ok!
+
+\end{lstlisting}
+
+\begin{lstlisting}
+class T {
+    public:
+    T(int a, bool b);
+    T(int a, double b);
+    T(std::initializer_list<long double> l);
+};
+
+int main() {
+    T t1(10, true)  // первый int, bool
+    T t2{10, true}; // третий init list
+    T t3(10, 0.2);  // второй int, double
+    T t4{10, 0.2};  // третий intl list
+    T t6({}); // Не будет работать!!
+}
+\end{lstlisting}
+        Подумать, как передавать пустой {\bf initializer\_list} конструктору.
+\begin{lstlisting}
+for (T var : container) {
+    // ....
+}
+
+// begin и end зопоминаются перед циклом.
+using TElem = std::pair<int, int>
+using TCont = std::vector<TElem>;
+Tcont container;
+
+for (auto x : container) {
+    // ...
+}
+\end{lstlisting}
+        \section{Ключевое слово override}
+\begin{lstlisting}
+struct A{
+    virtual void foo();
+    void bar();
+};
+
+struct B :A{
+    void foo() const override; // ошибка
+    void foo() override;
+    void bar() override; // ошибка
+}
+
+\end{lstlisting}
+        \section{Ключевое слово final}
+            Если указано {\bf final} то нельзя наследоваться дальше.
+\begin{lstlisting}
+struct A {
+    virtual void foo() final; // Запрет переопределения функции
+    void bar() final; // ошибка, так как функция не виртуальная
+};
+
+struct B final : A { // От структуры B нельзя отнаследоваться
+    void foo(); //ошибка т.к. foo final
+};
+
+struct C : B { // Ошибка т.к. B - final 
+};
+\end{lstlisting}
+\end{document}
