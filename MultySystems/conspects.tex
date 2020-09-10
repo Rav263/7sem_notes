@@ -1,0 +1,128 @@
+\documentclass[a4paper, 12pt, titlepage, finall]{extreport}
+
+%различные пакеты
+
+\usepackage[T1, T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{tikz}
+\usepackage{geometry}
+\usepackage{indentfirst}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{array}
+\graphicspath{{./images/}}
+
+\usetikzlibrary{positioning, arrows}
+
+\geometry{a4paper, left = 15mm, top = 10mm, bottom = 20mm, right = 15mm}
+
+\setmainfont{Spectral Light}%{Times New Roman}
+\setmonofont{DejaVu Sans Mono}
+%\setcounter{secnumdepth}{3}
+%\setcounter{tocdepth}{3}
+
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\lstdefinestyle{customasm}{
+  belowcaptionskip=1\baselineskip,
+  frame=L,
+  xleftmargin=\parindent,
+  language=[x86masm]Assembler,
+  basicstyle=\footnotesize\ttfamily,
+  commentstyle=\itshape\color{purple!40!black},
+}
+
+\lstset{escapechar=@,style=customc}
+
+\begin{document}
+
+    \begin{titlepage}
+        \begin{center}
+            {\small \sc Московский государственный университет имени М.~В.~Ломоносова\\
+            Факультет вычислительной математики и кибернетики\\
+            Кафедра автоматизации систем вычислительных комплексов\\}
+            \vfill
+            {\large \sc Конспекты лекций.}\\~\\
+
+            {\large \bf Распределённые системы.}\\~\\
+
+        \end{center}
+        
+        \begin{flushright}
+            \vfill
+            \vfill
+            {Никифоров Никита Игоревич, 421 группа}\\
+            {Лектор:}\\
+            {профессор Крюков Виктор Алексеевич, доцент Бахтин Владимир Александрович}\\
+        \end{flushright}
+
+        \begin{center}
+            \vfill
+            {\small Москва\\2020}
+        \end{center}
+    \end{titlepage}
+
+    \chapter*{Аннотация}
+    \newpage
+    \tableofcontents
+    \newpage
+    \chapter*{Введение}
+        \addcontentsline{toc}{chapter}{\protect\numberline{}Введение}%
+        
+    \chapter{Лекция 1}
+        \section{Основные понятия}
+            \textbf{Опр 1.} Расспределённая компьютерная система $-$ совокупность связанных сетью независимых компьютеров, 
+            которая предоставляется пользователю единым компьютером.\\
+            \textbf{Опр 2.} Расспределённая программная система $-$ совокупность компонентов, взаимодействующих посредством обмена сообщениями\\
+            Поговорим об особенностях распределённых систем (PC):
+            \begin{enumerate}
+                \item Конкуретность
+                \item Отсутствие глобальных часов $-$ невозможно полагаться на то, что все будут знать точное время.
+                \item Независимые отказы $-$ некоторые машины могут выходить из строя, при этом выход какой-либо машины не влияет на другие.
+            \end{enumerate}
+            Поговорим о тенденциях определяющих развитие РС сегодня:
+            \begin{enumerate}
+                \item Широкое распространение сетевых технологий
+                \item Повсеместное использование компьютинга в сочетании с желание поддержать мобильность пользователей в РС.
+                \item Растущий спрос на мультимедийные услуги.
+                \item Предоставление РС как утилиты (арендовать а не покупать ресурсы)
+            \end{enumerate}
+            Какие есть проблемы в расспределённых системах?
+            \begin{enumerate}
+                \item гетерогенность $-$ в большой РС ресурсы могут быть различны (различные ядра процессоров).
+                \item Открытость $-$ использование одних стандартов на различных машинах.
+                \item Секретность $-$ вещь понятная, но сложная.
+                \item Матабируемость (ресурсная, географическая, организационная).
+                \item Надёжность $-$ Должно быть надёжно.
+                \item Конкурентность $-$ Ыыыыы.
+                \item Прозрачноть $-$ Пользователь не должен знать ничего.
+                \item Качество обслуживания
+            \end{enumerate}
+        \section{История ОС}
+            \textbf{Опр 3.} Персональные ЭВМ $-$ пультовой режим\\
+            В использовании были огромные ЭВМ, в которых были библиотеки программ ввода$-$вывода, которые являлись служебными программами.
+            Изначально программистами были учёные, которые были специалиставми в различных областях, но потом они делигировали
+            взаимодествие с ЭВМ специально обученным людям $-$ операторам.
+            В ОС должны быть реализованы следующие вещи, для реализации мультипрограммного режима:
+            \begin{itemize}
+                \item Механизм прерываний
+                \item Таймер
+                \item Привелигерованный режим
+                \item Защита памяти
+            \end{itemize}
+            А есть ли возможность обеспечить мультипрограммный режим без использования данных механизмов?
+            Как пример операционная система \textbf{Pick}. ПРОСТО РЕАЛИЗУЙ ЭТО ПРОГРАММНО.
+\end{document}

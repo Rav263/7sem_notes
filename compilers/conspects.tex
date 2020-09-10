@@ -1,0 +1,102 @@
+\documentclass[a4paper, 12pt, titlepage, finall]{extreport}
+
+%различные пакеты
+
+\usepackage[T1, T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{tikz}
+\usepackage{geometry}
+\usepackage{indentfirst}
+\usepackage{fontspec}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{array}
+\graphicspath{{./images/}}
+
+\usetikzlibrary{positioning, arrows}
+
+\geometry{a4paper, left = 15mm, top = 10mm, bottom = 20mm, right = 15mm}
+
+\setmainfont{Spectral Light}%{Times New Roman}
+\setmonofont{DejaVu Sans Mono}
+%\setcounter{secnumdepth}{3}
+%\setcounter{tocdepth}{3}
+
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+\lstdefinestyle{customasm}{
+  belowcaptionskip=1\baselineskip,
+  frame=L,
+  xleftmargin=\parindent,
+  language=[x86masm]Assembler,
+  basicstyle=\footnotesize\ttfamily,
+  commentstyle=\itshape\color{purple!40!black},
+}
+
+\lstset{escapechar=@,style=customc}
+
+\begin{document}
+
+    \begin{titlepage}
+        \begin{center}
+            {\small \sc Московский государственный университет имени М.~В.~Ломоносова\\
+            Факультет вычислительной математики и кибернетики\\
+            Кафедра автоматизации систем вычислительных комплексов\\}
+            \vfill
+            {\large \sc Конспекты лекций.}\\~\\
+
+            {\large \bf Конструирование компиляторов.}\\~\\
+
+        \end{center}
+        
+        \begin{flushright}
+            \vfill
+            \vfill
+            {Никифоров Никита Игоревич, 421 группа}\\
+            {Лектор:}\\
+            {профессор }\\
+        \end{flushright}
+
+        \begin{center}
+            \vfill
+            {\small Москва\\2020}
+        \end{center}
+    \end{titlepage}
+
+    \chapter*{Аннотация}
+    \newpage
+    \tableofcontents
+    \newpage
+    \chapter*{Введение}
+        \addcontentsline{toc}{chapter}{\protect\numberline{}Введение}%
+        
+    \chapter{Неоптимизирующий компилятор}
+        Структура неоптимизируещего компилятора:
+        \begin{itemize}
+            \item Передний план (frontend) $-$ получает исходный код и переводит его в специальных вид \textbf{HIR}.
+            \item Задний план (backend) $-$
+        \end{itemize}
+        \textbf{Опр 1.} HIR $-$ атрибутированное абстрактное синтаксическое дерево (дерево программы).\\
+        \textbf{Опр 2.} Исходный код $-$ текст моуля компиляции в виде последовательности символов.\\
+        \textbf{Опр 3.}
+        Анализ исходного кода:
+        \begin{itemize}
+            \item Лексический анализ
+            \item Синтаксический анализ
+            \item Семантический анализ
+        \end{itemize}
+        Синтаксический анализ переводит исходный код программы в набор токенов, его цель сократить программу, путём удаления ненужных символов.
+        Лексический анализатор $-$ представляет из себя конечный автомат.
+\end{document}
